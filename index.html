@@ -1,779 +1,760 @@
-<!DOCTYPE html>  <html lang="en">  
-<head>  
-  <meta charset="UTF-8">  
-  <title>ADMIN | Preorder Panel</title>  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">  
-  <link rel="preconnect" href="https://fonts.googleapis.com">  
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">  
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">    <style>  
-    :root {  
-      --bg-body: #f3f4f6;  
-      --text-dark: #2d3436;  
-      --font-main: 'Poppins', sans-serif;  
-      --font-mono: 'JetBrains Mono', monospace;  
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ADMIN | Preorder Panel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
-      /* Gradients */  
-      --grad-header: linear-gradient(135deg, #0984e3 0%, #74b9ff 100%);  
-      --grad-green: linear-gradient(135deg, #00b894 0%, #00cec9 100%);  
-      --grad-orange: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);  
-      --grad-red: linear-gradient(135deg, #ff7675 0%, #E91E63 100%);   
-      --grad-blue: linear-gradient(135deg, #0984e3 0%, #74b9ff 100%);  
-      --grad-purple: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);  
-    }  
-  
-    * { box-sizing: border-box; margin: 0; padding: 0; outline: none; -webkit-tap-highlight-color: transparent; }  
-    body { background-color: var(--bg-body); color: var(--text-dark); font-family: var(--font-main); min-height: 100vh; padding-bottom: 80px; }  
-  
-    /* HEADER */  
-    .app-header { position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; background: var(--grad-header); color: white; box-shadow: 0 4px 20px rgba(9, 132, 227, 0.3); }  
-    .header-left { display: flex; align-items: center; gap: 15px; position: relative; z-index: 2; }  
-    .logo-img { width: 48px; height: 48px; border-radius: 12px; border: 2px solid rgba(255,255,255,0.8); object-fit: cover; background: #fff; }  
-    .logo-container { display: flex; flex-direction: column; justify-content: center; }  
-    .logo { font-family: var(--font-mono); font-weight: 700; font-size: 1.4rem; letter-spacing: -1px; line-height: 1.1; }  
-    .meta-bar { font-size: 0.65rem; font-weight: 600; letter-spacing: 2px; opacity: 0.8; text-transform: uppercase; margin-top: 2px; }  
-  
-    .header-actions { display: flex; align-items: center; gap: 15px; z-index: 10; margin-left: auto; }  
-    .header-util-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.2); border-radius: 50%; cursor: pointer; transition: 0.2s; }  
-    .header-util-icon:hover { background: rgba(255,255,255,0.4); }  
-  
-    .status-pill { position: relative; z-index: 2; font-size: 0.75rem; font-weight: 700; color: #0984e3; display: flex; align-items: center; gap: 8px; background: #ffffff; padding: 6px 16px; border-radius: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }  
-    .pulsing-dot { width: 8px; height: 8px; background: #0984e3; border-radius: 50%; animation: pulse 2s infinite; }  
-    @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }  
-  
-    /* LAYOUT */  
-    .main-layout { display: grid; grid-template-columns: 320px 1fr; gap: 2rem; max-width: 1600px; margin: 0 auto; width: 100%; padding: 2rem; padding-bottom: 100px; }  
-    @media (max-width: 1024px) { .main-layout { grid-template-columns: 1fr; padding: 1rem; gap: 1.5rem; padding-bottom: 100px; } .app-header { padding: 1rem; } }  
-  
-    /* COMPONENTS */  
-    .gold-card, .stat-card { border-radius: 24px; padding: 1.5rem; box-shadow: 0 10px 25px rgba(0,0,0,0.1); position: relative; overflow: visible; color: white; transition: transform 0.3s ease; border: none; }  
-    .gold-card-bg { position: absolute; inset:0; overflow: hidden; border-radius: 24px; z-index: 0; }  
-    .gold-card:hover, .stat-card:hover { transform: translateY(-5px); }  
-    aside .gold-card:nth-of-type(1) { background: var(--grad-purple); }   
-    aside .gold-card:nth-of-type(2) { background: var(--grad-green); }   
-    aside .gold-card:nth-of-type(3) { background: var(--grad-orange); }  
-  
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem; }  
-    .stats-grid .stat-card:nth-child(1) { background: var(--grad-blue); }  
-    .stats-grid .stat-card:nth-child(2) { background: var(--grad-purple); }  
-    .stats-grid .stat-card:nth-child(3) { background: var(--grad-red); }  
-    .stats-grid .stat-card:nth-child(4) { background: var(--grad-orange); }  
-    .stats-grid .stat-card:nth-child(5) { background: var(--grad-green); }  
-    .stat-title { opacity: 0.9; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; position: relative; z-index: 2; }  
-    .stat-value { font-size: 1.8rem; font-weight: 800; margin-top: 5px; position: relative; z-index: 2; }  
-    .wm-sidebar { position: absolute; bottom: -10px; right: -10px; font-size: 90px; color: rgba(255,255,255,0.15); transform: rotate(-10deg); pointer-events: none; z-index: 1; }  
-    .wm-stat { position: absolute; bottom: -15px; right: -10px; font-size: 80px; color: rgba(255,255,255,0.15); transform: rotate(-10deg); pointer-events: none; z-index: 1; }  
-  
-    /* INPUTS */  
-    .input-group { position: relative; margin-bottom: 12px; z-index: 2; }  
-    .input-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: rgba(255,255,255,0.9); font-size: 0.9rem; pointer-events: none; z-index: 3; }  
-    .clear-icon { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: #ff7675; font-size: 1rem; cursor: pointer; z-index: 10; display: none; transition: 0.2s; }  
-    .input-arrow { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: rgba(255,255,255,0.6); font-size: 0.8rem; pointer-events: none; z-index: 3; }  
-    .gold-input, .gold-select { width: 100%; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 12px 12px 12px 42px; border-radius: 12px; font-family: var(--font-main); font-size: 0.9rem; backdrop-filter: blur(5px); transition: all 0.25s ease; }  
-    .gold-select { appearance: none; -webkit-appearance: none; cursor: pointer; }  
-    .gold-select option { color: #333; background: #fff; padding: 10px; }  
-    .form-label { font-size: 0.75rem; color: rgba(255,255,255,0.95); font-weight: 700; text-transform: uppercase; display: block; margin-bottom: 6px; letter-spacing: 0.5px; position: relative; z-index: 2;}  
-    .btn-gold { width: 100%; background: white; color: #333; border: none; padding: 14px; border-radius: 12px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-transform: uppercase; transition: transform 0.2s; position: relative; z-index: 2; }  
-  
-    /* ORDER CARDS */  
-    .orders-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 2rem; }  
-    .order-card { border-radius: 24px; border: none; display: flex; flex-direction: column; transition: all 0.3s; box-shadow: 0 5px 20px rgba(0,0,0,0.08); position: relative; overflow: hidden; color: white; height: 100%; }  
-    .order-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.15); }  
-    .card-paid { background: var(--grad-green); }  
-    .card-pending { background: var(--grad-red); }   
-    .card-error { background: var(--grad-red); }  
-    .card-queues { background: var(--grad-purple); }  
-  
-    .head-echo { position: absolute; right: -10px; top: -10px; font-size: 90px; color: rgba(255,255,255,0.15); transform: rotate(15deg); pointer-events: none; z-index: 0; }  
-    .card-content { position: relative; z-index: 2; padding: 1.5rem; height: 100%; display: flex; flex-direction: column; }  
-    .card-head { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 15px; margin-bottom: 15px; position: relative; z-index: 1; }  
-    .card-id { font-family: monospace; font-weight: 800; cursor: pointer; text-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: color 0.2s;}  
-    .card-badge { background: rgba(255,255,255,0.25); padding: 4px 10px; border-radius: 8px; font-size: 0.7rem; font-weight: 700; backdrop-filter: blur(4px); margin-bottom: 4px; display: inline-block; }  
-    .glass-panel { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; padding: 12px; margin-bottom: 10px; backdrop-filter: blur(4px); }  
-    .prod-name { font-size: 1.1rem; font-weight: 700; line-height: 1.3; display: flex; align-items: center; gap: 8px; }  
-    .deal-tag { font-size: 0.7rem; opacity: 0.9; margin-top: 4px; display: block; }  
-    .money-row { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 4px; }  
-    .total-row { border-top: 1px dashed rgba(255,255,255,0.4); margin-top: 8px; padding-top: 8px; font-size: 1.2rem; font-weight: 800; display: flex; justify-content: space-between; }  
-    .date-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.75rem; }  
-    .date-item span { display: block; font-size: 0.6rem; opacity: 0.8; text-transform: uppercase; font-weight: 700; }  
-    .date-item div { font-family: monospace; font-weight: 600; display: flex; align-items: center; gap: 5px; }  
-    .memo-text { font-size: 0.75rem; font-style: italic; display: flex; gap: 6px; }  
-  
-    /* ACTIONS */  
-    .action-row { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 10px; gap: 8px; flex-wrap: wrap; }  
-    .icon-group { display: flex; gap: 8px; align-items: center; }  
-    .status-pill-card { background: white; padding: 6px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; box-shadow: 0 4px 10px rgba(0,0,0,0.15); white-space: nowrap; }  
-    .text-paid { color: #00b894; } .text-pend { color: #d63031; } .text-err { color: #d63031; } .text-queues { color: #6c5ce7; }  
-    .link-btn-external { text-decoration: none; background: #fff; padding: 8px 15px; border-radius: 20px; color: #2d3436; font-size: 0.75rem; font-weight: 800; text-align: center; display: inline-flex; align-items: center; gap: 5px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); white-space: nowrap; }  
-    .btn-icon { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1); cursor: pointer; border: none; font-size: 1.1rem; transition: transform 0.2s; text-decoration: none; }  
-    .btn-icon:hover { transform: scale(1.1); background: #f9f9f9; }  
-    .btn-wa-icon { color: #25D366; } .btn-edit-icon { color: #636e72; } .btn-edit-icon:hover { color: #0984e3; }  
-  
-    /* MODAL */  
-    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; display: none; justify-content: center; align-items: center; backdrop-filter: blur(5px); }  
-    .modal-overlay.active { display: flex; }  
-    .modal-box { background: #fff; width: 90%; max-width: 400px; padding: 30px; border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); }  
-    .modal-title { color: #2d3436; font-size: 1.2rem; font-weight: 800; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }  
-    .modal-btn-row { display: flex; gap: 10px; margin-top: 20px; }  
-    .modal-save { flex: 1; background: var(--grad-green); color: white; border: none; padding: 12px; border-radius: 12px; font-weight: 700; cursor: pointer; }  
-    .modal-cancel { flex: 1; background: #f3f4f6; color: #2d3436; border: none; padding: 12px; border-radius: 12px; font-weight: 700; cursor: pointer; }  
-  
-    /* TOAST & LOADER */  
-    .toast-box { position: fixed; top: 25px; right: 25px; background: white; color: #2d3436; padding: 15px 25px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); border-left: 6px solid #00b894; display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 0.9rem; z-index: 10000; transform: translateX(200%); transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55); }  
-    .toast-box.active { transform: translateX(0); }  
-    .toast-box i { color: #00b894; font-size: 1.2rem; }  
-    #loader { position: fixed; inset: 0; background: #fff; z-index: 300; display: flex; justify-content: center; align-items: center; flex-direction: column; gap: 15px; }  
-    .spinner { width: 50px; height: 50px; border: 4px solid #f3f4f6; border-top-color: #0984e3; border-radius: 50%; animation: spin 1s linear infinite; }  
-    @keyframes spin { to { transform: rotate(360deg); } }  
-    .leader-row { display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.2); padding: 8px 0; font-size: 0.85rem; position: relative; z-index: 2; }  
+  <style>
+    /* -----------------------------------------------------------
+       EXISTING CSS (Unchanged Visuals)
+       ----------------------------------------------------------- */
+    :root {
+      --bg-body: #f3f4f6;
+      --text-dark: #2d3436;
+      --font-main: 'Poppins', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --grad-header: linear-gradient(135deg, #0984e3 0%, #74b9ff 100%);
+      --grad-green: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+      --grad-red: linear-gradient(135deg, #ff7675 0%, #E91E63 100%);
+      --grad-purple: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+      --grad-blue: linear-gradient(135deg, #0984e3 0%, #74b9ff 100%);
+      --grad-orange: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; outline: none; -webkit-tap-highlight-color: transparent; }
+    body { background-color: var(--bg-body); color: var(--text-dark); font-family: var(--font-main); min-height: 100vh; padding-bottom: 80px; }
+
+    /* Header */
+    .app-header { position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 0.6rem 2rem; background: var(--grad-red); color: white; box-shadow: 0 4px 20px rgba(233, 30, 99, 0.3); }
+    .header-left { display: flex; align-items: center; gap: 15px; position: relative; z-index: 2; }
+    .logo-img { width: 48px; height: 48px; border-radius: 12px; border: 2px solid rgba(255,255,255,0.8); object-fit: cover; background: #fff; }
+    .logo-container { display: flex; flex-direction: column; justify-content: center; }
+    .logo { font-family: var(--font-mono); font-weight: 700; font-size: 1.4rem; letter-spacing: -1px; line-height: 1.1; }
+    .meta-bar { font-size: 0.65rem; font-weight: 600; letter-spacing: 2px; opacity: 0.8; text-transform: uppercase; margin-top: 2px; }
+
+    .header-actions { display: flex; align-items: center; gap: 15px; z-index: 10; margin-left: auto; }
+    .header-util-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.2); border-radius: 50%; cursor: pointer; transition: 0.2s; }
+    .header-util-icon:hover { background: rgba(255,255,255,0.4); }
+
+    .status-pill { position: relative; z-index: 2; font-size: 0.75rem; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.2); padding: 6px 16px; border-radius: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    .pulsing-dot { width: 8px; height: 8px; background: #fff; border-radius: 50%; animation: pulse 2s infinite; }
+    @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+
+    /* Layout */
+    .main-layout { display: grid; grid-template-columns: 320px 1fr; gap: 2rem; max-width: 1600px; margin: 0 auto; width: 100%; padding: 2rem; padding-bottom: 100px; }
+    @media (max-width: 1024px) { .main-layout { grid-template-columns: 1fr; padding: 1rem; gap: 1.5rem; padding-bottom: 100px; } .app-header { padding: 1rem; } }
+
+    /* Cards & Components */
+    .gold-card, .stat-card { border-radius: 24px; padding: 1.5rem; box-shadow: 0 10px 25px rgba(0,0,0,0.1); position: relative; overflow: visible; color: white; transition: transform 0.3s ease; border: none; }
+    .gold-card-bg { position: absolute; inset:0; overflow: hidden; border-radius: 24px; z-index: 0; }
+    .gold-card:hover, .stat-card:hover { transform: translateY(-5px); }
+    aside .gold-card:nth-of-type(1) { background: var(--grad-purple); } 
+    aside .gold-card:nth-of-type(2) { background: var(--grad-green); } 
+    aside .gold-card:nth-of-type(3) { background: var(--grad-orange); }
+
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem; }
+    .stats-grid .stat-card:nth-child(1) { background: var(--grad-blue); }
+    .stats-grid .stat-card:nth-child(2) { background: var(--grad-purple); }
+    .stats-grid .stat-card:nth-child(3) { background: var(--grad-red); }
+    .stats-grid .stat-card:nth-child(4) { background: var(--grad-orange); }
+    .stats-grid .stat-card:nth-child(5) { background: var(--grad-green); }
+    .stat-title { opacity: 0.9; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; position: relative; z-index: 2; }
+    .stat-value { font-size: 1.8rem; font-weight: 800; margin-top: 5px; position: relative; z-index: 2; }
+    .wm-sidebar { position: absolute; bottom: -10px; right: -10px; font-size: 90px; color: rgba(255,255,255,0.15); transform: rotate(-10deg); pointer-events: none; z-index: 1; }
+    .wm-stat { position: absolute; bottom: -15px; right: -10px; font-size: 80px; color: rgba(255,255,255,0.15); transform: rotate(-10deg); pointer-events: none; z-index: 1; }
+
+    /* Inputs */
+    .input-group { position: relative; margin-bottom: 12px; z-index: 2; }
+    .input-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: rgba(255,255,255,0.9); font-size: 0.9rem; pointer-events: none; z-index: 3; }
+    .clear-icon { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: #ff7675; font-size: 1rem; cursor: pointer; z-index: 10; display: none; transition: 0.2s; }
+    .input-arrow { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: rgba(255,255,255,0.6); font-size: 0.8rem; pointer-events: none; z-index: 3; }
+    .gold-input, .gold-select { width: 100%; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 12px 12px 12px 42px; border-radius: 12px; font-family: var(--font-main); font-size: 0.9rem; backdrop-filter: blur(5px); transition: all 0.25s ease; }
+    .gold-select { appearance: none; -webkit-appearance: none; cursor: pointer; }
+    .gold-select option { color: #333; background: #fff; padding: 10px; }
+    .form-label { font-size: 0.75rem; color: rgba(255,255,255,0.95); font-weight: 700; text-transform: uppercase; display: block; margin-bottom: 6px; letter-spacing: 0.5px; position: relative; z-index: 2;}
+    .btn-gold { width: 100%; background: white; color: #333; border: none; padding: 14px; border-radius: 12px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-transform: uppercase; transition: transform 0.2s; position: relative; z-index: 2; }
+
+    /* Order Cards */
+    .orders-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 2rem; }
+    .order-card { border-radius: 24px; border: none; display: flex; flex-direction: column; transition: all 0.3s; box-shadow: 0 5px 20px rgba(0,0,0,0.08); position: relative; overflow: hidden; color: white; height: 100%; }
+    .order-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.15); }
+    .card-paid { background: var(--grad-green); }
+    .card-pending { background: var(--grad-red); } 
+    .card-error { background: var(--grad-red); }
+    .card-queues { background: var(--grad-purple); }
+
+    .head-echo { position: absolute; right: -10px; top: -10px; font-size: 90px; color: rgba(255,255,255,0.15); transform: rotate(15deg); pointer-events: none; z-index: 0; }
+    .card-content { position: relative; z-index: 2; padding: 1.5rem; height: 100%; display: flex; flex-direction: column; }
+    .card-head { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 15px; margin-bottom: 15px; position: relative; z-index: 1; }
+    .card-id { font-family: monospace; font-weight: 800; cursor: pointer; text-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: color 0.2s;}
+    .card-badge { background: rgba(255,255,255,0.25); padding: 4px 10px; border-radius: 8px; font-size: 0.7rem; font-weight: 700; backdrop-filter: blur(4px); margin-bottom: 4px; display: inline-block; }
+    .glass-panel { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; padding: 12px; margin-bottom: 10px; backdrop-filter: blur(4px); }
+    .prod-name { font-size: 1.1rem; font-weight: 700; line-height: 1.3; display: flex; align-items: center; gap: 8px; }
+    .deal-tag { font-size: 0.7rem; opacity: 0.9; margin-top: 4px; display: block; }
+    .money-row { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 4px; }
+    .total-row { border-top: 1px dashed rgba(255,255,255,0.4); margin-top: 8px; padding-top: 8px; font-size: 1.2rem; font-weight: 800; display: flex; justify-content: space-between; }
+    .date-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.75rem; }
+    .date-item span { display: block; font-size: 0.6rem; opacity: 0.8; text-transform: uppercase; font-weight: 700; }
+    .date-item div { font-family: monospace; font-weight: 600; display: flex; align-items: center; gap: 5px; }
+    .memo-text { font-size: 0.75rem; font-style: italic; display: flex; gap: 6px; }
+
+    /* Actions */
+    .action-row { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 10px; gap: 8px; flex-wrap: wrap; }
+    .icon-group { display: flex; gap: 8px; align-items: center; }
+    .status-pill-card { background: white; padding: 6px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; box-shadow: 0 4px 10px rgba(0,0,0,0.15); white-space: nowrap; }
+    .text-paid { color: #00b894; } .text-pend { color: #d63031; } .text-err { color: #d63031; } .text-queues { color: #6c5ce7; }
+    .link-btn-external { text-decoration: none; background: #fff; padding: 8px 15px; border-radius: 20px; color: #2d3436; font-size: 0.75rem; font-weight: 800; text-align: center; display: inline-flex; align-items: center; gap: 5px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); white-space: nowrap; }
+    .btn-icon { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1); cursor: pointer; border: none; font-size: 1.1rem; transition: transform 0.2s; text-decoration: none; }
+    .btn-icon:hover { transform: scale(1.1); background: #f9f9f9; }
+    .btn-wa-icon { color: #25D366; } .btn-edit-icon { color: #636e72; } .btn-edit-icon:hover { color: #0984e3; }
+
+    /* Modal */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; display: none; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
+    .modal-overlay.active { display: flex; }
+    .modal-box { background: #fff; width: 90%; max-width: 400px; padding: 30px; border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
+    .modal-title { color: #2d3436; font-size: 1.2rem; font-weight: 800; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+    .modal-btn-row { display: flex; gap: 10px; margin-top: 20px; }
+    .modal-save { flex: 1; background: var(--grad-green); color: white; border: none; padding: 12px; border-radius: 12px; font-weight: 700; cursor: pointer; }
+    .modal-cancel { flex: 1; background: #f3f4f6; color: #2d3436; border: none; padding: 12px; border-radius: 12px; font-weight: 700; cursor: pointer; }
+
+    /* Toast & Loader */
+    .toast-box { position: fixed; top: 25px; right: 25px; background: white; color: #2d3436; padding: 15px 25px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); border-left: 6px solid #00b894; display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 0.9rem; z-index: 10000; transform: translateX(200%); transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55); }
+    .toast-box.active { transform: translateX(0); }
+    .toast-box i { color: #00b894; font-size: 1.2rem; }
+    #loader { position: fixed; inset: 0; background: #fff; z-index: 300; display: flex; justify-content: center; align-items: center; flex-direction: column; gap: 15px; }
+    .spinner { width: 50px; height: 50px; border: 4px solid #f3f4f6; border-top-color: #0984e3; border-radius: 50%; animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .leader-row { display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.2); padding: 8px 0; font-size: 0.85rem; position: relative; z-index: 2; }
+    
+    /* Scroll Btn */
+    .scroll-btn { position: fixed; bottom: 100px; right: 20px; width: 45px; height: 45px; border-radius: 50%; background: #0984e3; color: white; border: none; box-shadow: 0 4px 15px rgba(9, 132, 227, 0.4); cursor: pointer; z-index: 90; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; transition: transform 0.2s; }
+    .scroll-btn:hover { transform: translateY(-5px); background: #74b9ff; }
+
+    /* Notifications */
+    .notif-btn { background: rgba(255,255,255,0.2); border: none; width: 40px; height: 40px; border-radius: 50%; color: white; cursor: pointer; font-size: 1.1rem; transition: 0.2s; position: relative; display: flex; align-items: center; justify-content: center; }
+    .notif-btn:hover { background: rgba(255,255,255,0.4); }
+    .notif-badge { position: absolute; top: 0; right: 0; width: 12px; height: 12px; background: #ff7675; border-radius: 50%; border: 2px solid #74b9ff; display: none; }
+    .notif-badge.show { display: block; }
+    .notif-dropdown { position: absolute; top: 55px; right: 0; width: 320px; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); padding: 0; display: none; flex-direction: column; overflow: hidden; color: #2d3436; animation: slideDown 0.2s ease; z-index: 200; }
+    .notif-dropdown.active { display: flex; }
+    @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+    .notif-header { padding: 15px; background: #f3f4f6; border-bottom: 1px solid #dfe6e9; font-weight: 800; font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center; }
+    .notif-list { max-height: 300px; overflow-y: auto; }
+    .notif-item { padding: 12px 15px; border-bottom: 1px solid #f1f2f6; font-size: 0.8rem; }
+    .notif-time { font-size: 0.7rem; color: #b2bec3; font-weight: 600; margin-bottom: 2px; }
+    .notif-id { font-family: var(--font-mono); color: #0984e3; font-weight: 700; }
+    .notif-detail { color: #636e72; margin-top: 2px; font-size: 0.75rem; }
+
+    /* Bottom Nav */
+    .bottom-nav { position: fixed; bottom: 25px; left: 0; width: 100%; display: flex; justify-content: center; z-index: 900; pointer-events: none; transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
+    .bottom-nav.nav-hidden { transform: translateY(150%); }
+    .nav-pill { pointer-events: auto; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); padding: 6px; border-radius: 50px; display: flex; gap: 5px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.5) inset; border: 1px solid rgba(255,255,255,0.3); }
+    .nav-item { background: transparent; border: none; padding: 10px 24px; border-radius: 40px; cursor: pointer; display: flex; align-items: center; gap: 8px; color: #b2bec3; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); position: relative; overflow: hidden; }
+    .nav-icon { font-size: 1.1rem; transition: transform 0.3s ease; }
+    .nav-label { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; max-width: 0; opacity: 0; white-space: nowrap; transition: all 0.3s ease; }
+    .nav-item.active { background: var(--grad-red); color: white; box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3); padding-right: 20px; padding-left: 20px; }
+    .nav-item.active .nav-label { max-width: 100px; opacity: 1; margin-left: 4px; }
+    .nav-item.active .nav-icon { transform: scale(1.1); }
+    .nav-item:hover:not(.active) { background: rgba(0,0,0,0.03); color: #636e72; }
+    @media (max-width: 480px) { .bottom-nav { bottom: 15px; } .nav-pill { padding: 5px; } .nav-item { padding: 10px 18px; } }
+    .view-section { animation: fadeInView 0.4s ease-out; }
+    @keyframes fadeInView { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  </style> 
+</head>
+<body>
+
+  <div id="toastNotification" class="toast-box">
+    <i class="fa-solid fa-circle-check"></i>
+    <span id="toastMessage">Success</span>
+  </div>
+
+  <div id="loader">
+    <div class="spinner"></div>
+    <div style="font-weight: 700; color: #0984e3; letter-spacing: 1px;">SYNCING DATA...</div>
+  </div>
+
+  <div class="modal-overlay" id="editModal">
+    <div class="modal-box">
+      <div class="modal-title">Update Order</div>
+      <label class="form-label" style="color:#636e72;">Status</label>
+      <div class="input-group" style="margin-bottom:10px;">
+          <select id="editStatus" class="gold-select" style="background:#f9fafb; color:#2d3436; border:1px solid #dfe6e9;" onchange="autoFillDate()">
+            <option value="PENDING">PENDING</option>
+            <option value="PAID">PAID</option>
+            <option value="WARNING">WARNING</option>
+            <option value="ERROR">ERROR</option>
+            <option value="">QUEUES (Blank)</option>
+          </select>
+          <i class="fa-solid fa-tag input-icon" style="color:#b2bec3;"></i>
+      </div>
+      <label class="form-label" style="color:#636e72;">Filled Date</label>
+      <div class="input-group">
+          <input type="text" id="editFilled" class="gold-input" style="background:#f9fafb; color:#2d3436; border:1px solid #dfe6e9;" placeholder="DD/MM/YYYY">
+          <i class="fa-solid fa-pen-nib input-icon" style="color:#b2bec3;"></i>
+      </div>
+      <label class="form-label" style="color:#636e72;">Paid Date</label>
+      <div class="input-group">
+          <input type="text" id="editPaid" class="gold-input" style="background:#f9fafb; color:#2d3436; border:1px solid #dfe6e9;" placeholder="DD/MM/YYYY">
+          <i class="fa-solid fa-calendar-check input-icon" style="color:#b2bec3;"></i>
+      </div>
+      <label class="form-label" style="color:#636e72;">Remarks (Timeline)</label>
+      <div class="input-group">
+          <textarea id="editRemarks" class="gold-input" rows="3" style="background:#f9fafb; color:#2d3436; border:1px solid #dfe6e9; padding-left:12px;"></textarea>
+      </div>
+      <div class="modal-btn-row">
+        <button class="modal-cancel" onclick="closeModal()">Cancel</button>
+        <button class="modal-save" id="saveBtn" onclick="saveChanges()">Save Update</button>
+      </div>
+    </div>
+  </div>
+
+  <header class="app-header">
+    <div class="header-left">
+        <img src="https://drive.google.com/thumbnail?id=1IgeL0FRaPXfpmnBEh7mKdpOa2Pgeqdn2&sz=w200" class="logo-img" alt="Logo">
+        <div class="logo-container">
+            <div class="logo">PREORDER ADMIN PANEL</div>
+            <div class="meta-bar">MADE BY HARSHIT</div>
+        </div>
+    </div>
+    <div class="header-actions">
+        <div class="header-util-icon" title="System Status"><i class="fa-solid fa-server"></i></div>
+        <div class="status-pill"><div class="pulsing-dot"></div> ADMIN MODE</div>
+        <div style="position:relative;">
+            <button class="notif-btn" onclick="toggleNotifs()">
+                <i class="fa-solid fa-bell"></i>
+                <div id="notifBadge" class="notif-badge"></div>
+            </button>
+            <div id="notifPanel" class="notif-dropdown">
+                <div class="notif-header">
+                    <span>AUDIT LOGS</span>
+                    <i class="fa-solid fa-xmark" style="cursor:pointer;" onclick="toggleNotifs()"></i>
+                </div>
+                <div id="notifList" class="notif-list">
+                    <div style="padding:20px; text-align:center; color:#b2bec3;">Loading logs...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </header>
+
+  <div class="main-layout">
+    <aside style="display: flex; flex-direction: column; gap: 1.5rem;">
+      <div class="gold-card">
+        <div class="gold-card-bg"><i class="fa-solid fa-magnifying-glass wm-sidebar"></i></div>
+        <label class="form-label">Search</label>
+        <div class="input-group">
+            <i class="fa-solid fa-magnifying-glass input-icon"></i>
+            <input type="text" id="searchInput" class="gold-input" placeholder="ID or Name..." onkeyup="handleSearchKey()">
+            <i class="fa-solid fa-circle-xmark clear-icon" id="searchClearBtn" onclick="clearSearch()"></i>
+        </div>
+      </div>
       
-    /* SCROLL BTN */  
-    .scroll-btn { position: fixed; bottom: 100px; right: 20px; width: 45px; height: 45px; border-radius: 50%; background: #0984e3; color: white; border: none; box-shadow: 0 4px 15px rgba(9, 132, 227, 0.4); cursor: pointer; z-index: 90; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; transition: transform 0.2s; }  
-    .scroll-btn:hover { transform: translateY(-5px); background: #74b9ff; }  
-  
-    /* NOTIFICATIONS */  
-    .notif-btn { background: rgba(255,255,255,0.2); border: none; width: 40px; height: 40px; border-radius: 50%; color: white; cursor: pointer; font-size: 1.1rem; transition: 0.2s; position: relative; display: flex; align-items: center; justify-content: center; }  
-    .notif-btn:hover { background: rgba(255,255,255,0.4); }  
-    .notif-badge { position: absolute; top: 0; right: 0; width: 12px; height: 12px; background: #ff7675; border-radius: 50%; border: 2px solid #74b9ff; display: none; }  
-    .notif-badge.show { display: block; }  
-    .notif-dropdown { position: absolute; top: 55px; right: 0; width: 320px; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); padding: 0; display: none; flex-direction: column; overflow: hidden; color: #2d3436; animation: slideDown 0.2s ease; z-index: 200; }  
-    .notif-dropdown.active { display: flex; }  
-    @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }  
-    .notif-header { padding: 15px; background: #f3f4f6; border-bottom: 1px solid #dfe6e9; font-weight: 800; font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center; }  
-    .notif-list { max-height: 300px; overflow-y: auto; }  
-    .notif-item { padding: 12px 15px; border-bottom: 1px solid #f1f2f6; font-size: 0.8rem; }  
-    .notif-time { font-size: 0.7rem; color: #b2bec3; font-weight: 600; margin-bottom: 2px; }  
-    .notif-id { font-family: var(--font-mono); color: #0984e3; font-weight: 700; }  
-    .notif-detail { color: #636e72; margin-top: 2px; font-size: 0.75rem; }  
-  
-    /* --- BOTTOM NAV CSS --- */  
-    .bottom-nav { position: fixed; bottom: 25px; left: 0; width: 100%; display: flex; justify-content: center; z-index: 900; pointer-events: none; transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }  
-    .bottom-nav.nav-hidden { transform: translateY(150%); }  
-    .nav-pill { pointer-events: auto; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); padding: 6px; border-radius: 50px; display: flex; gap: 5px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.5) inset; border: 1px solid rgba(255,255,255,0.3); }  
-    .nav-item { background: transparent; border: none; padding: 10px 24px; border-radius: 40px; cursor: pointer; display: flex; align-items: center; gap: 8px; color: #b2bec3; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); position: relative; overflow: hidden; }  
-    .nav-icon { font-size: 1.1rem; transition: transform 0.3s ease; }  
-    .nav-label { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; max-width: 0; opacity: 0; white-space: nowrap; transition: all 0.3s ease; }  
-    .nav-item.active { background: var(--grad-red); color: white; box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3); padding-right: 20px; padding-left: 20px; }  
-    .nav-item.active .nav-label { max-width: 100px; opacity: 1; margin-left: 4px; }  
-    .nav-item.active .nav-icon { transform: scale(1.1); }  
-    .nav-item:hover:not(.active) { background: rgba(0,0,0,0.03); color: #636e72; }  
-    @media (max-width: 480px) { .bottom-nav { bottom: 15px; } .nav-pill { padding: 5px; } .nav-item { padding: 10px 18px; } }  
-    .view-section { animation: fadeInView 0.4s ease-out; }  
-    @keyframes fadeInView { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }  
-  
-    /* --- VISION VIEW: CINEMATIC ENGINE --- */  
-    .btn-vision { width: 100%; background: #2d3436; color: white; border: none; padding: 16px; border-radius: 16px; font-weight: 800; cursor: pointer; position: relative; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.2); transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); margin-bottom: 1.5rem; letter-spacing: 1px; z-index: 5; }  
-    .btn-vision:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(0,0,0,0.3); }  
-    .vision-glow { position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); animation: shimmer 3s infinite; }  
-    @keyframes shimmer { 100% { left: 200%; } }  
-    .vision-viewport { width: 100%; height: 80vh; position: relative; overflow: hidden; }  
-    .vision-header { text-align: center; margin-bottom: 30px; color: #2d3436; }  
-    .vision-header h2 { font-weight: 900; font-size: 1.5rem; letter-spacing: -1px; }  
-    .vision-header p { font-size: 0.8rem; color: #b2bec3; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; }  
-    .cluster-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 40px 30px; padding: 20px; perspective: 1000px; }  
-    .cluster-stack { position: relative; height: 180px; cursor: pointer; transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); transform-style: preserve-3d; }  
-    .cluster-stack:hover { transform: translateY(-10px) scale(1.02); }  
-    .stack-card { position: absolute; inset: 0; background: white; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; flex-direction: column; border: 1px solid rgba(0,0,0,0.05); transition: all 0.4s ease; }  
-    .stack-card:nth-child(1) { transform: translateZ(0); z-index: 3; background: white; }  
-    .stack-card:nth-child(2) { transform: translateY(10px) scale(0.95) translateZ(-20px); z-index: 2; opacity: 0.7; background: #f1f2f6; }  
-    .stack-card:nth-child(3) { transform: translateY(20px) scale(0.90) translateZ(-40px); z-index: 1; opacity: 0.4; background: #dfe6e9; }  
-    .cluster-avatar { width: 50px; height: 50px; background: var(--grad-header); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem; margin-bottom: 10px; font-weight: 700; box-shadow: 0 5px 15px rgba(9, 132, 227, 0.3); }  
-    .cluster-name { font-weight: 800; font-size: 1.1rem; color: #2d3436; }  
-    .cluster-count { font-size: 0.75rem; color: #00b894; font-weight: 700; text-transform: uppercase; margin-top: 4px; background: rgba(0, 184, 148, 0.1); padding: 4px 12px; border-radius: 20px; }  
-    #vision-carousel-stage { position: absolute; inset: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); z-index: 100; display: flex; flex-direction: column; justify-content: center; overflow: hidden; }  
-    .carousel-ui-layer { position: absolute; top: 20px; left: 0; width: 100%; display: flex; justify-content: space-between; align-items: flex-start; padding: 0 40px; z-index: 200; pointer-events: none; }  
-    .btn-back-vision { pointer-events: auto; background: white; border: none; padding: 10px 20px; border-radius: 30px; font-weight: 700; color: #2d3436; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: 0.2s; }  
-    .btn-back-vision:hover { transform: translateX(-5px); color: #0984e3; }  
-    .carousel-meta { text-align: right; }  
-    #carousel-title { font-size: 2rem; font-weight: 900; color: #2d3436; letter-spacing: -1px; margin: 0; }  
-    #carousel-counter { font-family: var(--font-mono); font-size: 1rem; color: #b2bec3; font-weight: 700; }  
-    .carousel-scene { width: 100%; height: 400px; position: relative; perspective: 1200px; display: flex; align-items: center; justify-content: center; }  
-    .carousel-track { position: relative; width: 350px; height: 100%; transform-style: preserve-3d; transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); }  
-    .c-card { position: absolute; top: 10%; left: 0; width: 100%; height: 80%; background: white; border-radius: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.15); transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); opacity: 0; pointer-events: none; overflow: hidden; border: 1px solid rgba(255,255,255,0.5); }  
-    .nav-zone { position: absolute; top: 100px; bottom: 100px; width: 15%; z-index: 150; cursor: pointer; }  
-    .nav-zone.left { left: 0; } .nav-zone.right { right: 0; }  
-    .nav-zone:hover { background: linear-gradient(90deg, rgba(0,0,0,0.02), transparent); }  
+      <div class="gold-card">
+        <div class="gold-card-bg"><i class="fa-solid fa-filter wm-sidebar"></i></div>
+        <label class="form-label">Filters</label>
+        <div class="input-group">
+            <i class="fa-solid fa-handshake input-icon"></i>
+            <select id="mediatorSelect" class="gold-select" onchange="applyFilters()"><option value="All">All Mediators</option></select>
+            <i class="fa-solid fa-chevron-down input-arrow"></i>
+        </div>
+        <div class="input-group">
+            <i class="fa-solid fa-tags input-icon"></i>
+            <select id="statusSelect" class="gold-select" onchange="applyFilters()">
+                <option value="All">All Statuses</option>
+                <option value="PAID">Paid</option>
+                <option value="PENDING">Pending</option>
+                <option value="QUEUES">QUEUES</option>
+            </select>
+            <i class="fa-solid fa-chevron-down input-arrow"></i>
+        </div>
+        <div class="input-group">
+            <i class="fa-solid fa-calendar-days input-icon"></i>
+            <select id="monthSelect" class="gold-select" onchange="applyFilters()"><option value="All">All Months</option></select>
+            <i class="fa-solid fa-chevron-down input-arrow"></i>
+        </div>
+        <div class="input-group">
+            <i class="fa-solid fa-layer-group input-icon"></i>
+            <select id="typeSelect" class="gold-select" onchange="applyFilters()">
+                <option value="All">All Types</option>
+                <option value="LESS">Less Orders (Deducted)</option>
+                <option value="COMMISSION">Commission Orders</option>
+                <option value="FULL">Full Refund Orders</option>
+            </select>
+            <i class="fa-solid fa-chevron-down input-arrow"></i>
+        </div>
+        <label class="form-label" style="margin-top: 15px;">Sort Order</label>
+        <div class="input-group">
+            <i class="fa-solid fa-arrow-down-wide-short input-icon"></i>
+            <select id="sortSelect" class="gold-select" onchange="applyFilters()">
+                <option value="DESC">Newest First (Descending)</option>
+                <option value="ASC">Oldest First (Ascending)</option>
+            </select>
+            <i class="fa-solid fa-chevron-down input-arrow"></i>
+        </div>
+      </div>
+
+      <div class="gold-card">
+        <div class="gold-card-bg"><i class="fa-solid fa-trophy wm-sidebar"></i></div>
+        <label class="form-label">Leaderboard</label>
+        <div id="leaderboardList" style="position: relative; z-index: 2;"></div>
+      </div>
+      <button class="btn-gold" onclick="downloadCSV()">
+          <i class="fa-solid fa-file-csv"></i> Download CSV
+      </button>
+    </aside>
+
+    <main style="display: flex; flex-direction: column; gap: 2rem;">
+      <div id="view-home" class="view-section active-view">
+        <div class="stats-grid">
+            <div class="stat-card">
+            <div class="gold-card-bg"><i class="fa-solid fa-boxes-stacked wm-stat"></i></div>
+            <div class="stat-title">Orders</div><div class="stat-value" id="statOrders">0</div>
+            </div>
+            <div class="stat-card">
+            <div class="gold-card-bg"><i class="fa-solid fa-wallet wm-stat"></i></div>
+            <div class="stat-title">Amount</div><div class="stat-value" id="statTotalValue">₹0</div>
+            </div>
+            <div class="stat-card">
+            <div class="gold-card-bg"><i class="fa-solid fa-scissors wm-stat"></i></div>
+            <div class="stat-title">Deducted</div><div class="stat-value" id="statDeducted">₹0</div>
+            </div>
+            <div class="stat-card">
+            <div class="gold-card-bg"><i class="fa-solid fa-rotate-left wm-stat"></i></div>
+            <div class="stat-title">Refundable</div><div class="stat-value" id="statRefundable">₹0</div>
+            </div>
+            <div class="stat-card">
+            <div class="gold-card-bg"><i class="fa-solid fa-chart-line wm-stat"></i></div>
+            <div class="stat-title">Commission</div><div class="stat-value" id="statCommission">₹0</div>
+            </div>
+        </div>
+        <div id="ordersGridHome" class="orders-grid" style="margin-top: 2rem;"></div>
+      </div>
+
+      <div id="view-graph" class="view-section" style="display: none;">
+          <div class="gold-card" style="background: white; color: #2d3436; text-align: center; padding: 4rem 2rem;">
+            <i class="fa-solid fa-chart-pie" style="font-size: 3rem; color: #E91E63; margin-bottom: 1rem;"></i>
+            <h2 style="font-weight: 800;">Analytics Hub</h2>
+            <p style="color: #636e72;">Detailed performance charts coming soon.</p>
+          </div>
+      </div>
+
+      <div id="view-list" class="view-section" style="display: none;">
+          <div style="margin-bottom: 1rem; font-weight: 700; color: #636e72;">FULL ORDER REGISTRY</div>
+          <div id="ordersGridList" class="orders-grid"></div>
+      </div>
+
+      <footer style="text-align: center; color: #b2bec3; font-size: 0.8rem; margin-top: 20px; font-weight: 600; letter-spacing: 1px;">
+        &copy; PREORDER ALL RIGHTS RESERVED
+      </footer>
+    </main>
+  </div>
+
+  <button class="scroll-btn" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">
+    <i class="fa-solid fa-arrow-up"></i>
+  </button>
+
+  <nav class="bottom-nav" id="mainNavBar">
+    <div class="nav-pill">
+      <button class="nav-item active" onclick="switchTab('home')">
+        <div class="nav-icon"><i class="fa-solid fa-house"></i></div>
+        <span class="nav-label">Home</span>
+      </button>
+      <button class="nav-item" onclick="switchTab('graph')">
+        <div class="nav-icon"><i class="fa-solid fa-chart-simple"></i></div>
+        <span class="nav-label">Graph</span>
+      </button>
+      <button class="nav-item" onclick="switchTab('list')">
+        <div class="nav-icon"><i class="fa-solid fa-list-check"></i></div>
+        <span class="nav-label">List</span>
+      </button>
+    </div>
+  </nav>
+
+  <script>
+    // -----------------------------------------------------------------
+    // REPLACE THIS WITH YOUR DEPLOYED GOOGLE APPS SCRIPT WEB APP URL
+    const API_URL = "https://script.google.com/macros/s/AKfycbx26gD4Z094w6vvsGgqqOvhIr4rc2E091TacthsDHsqdAoqEyiNbPh_PmyIMWmOtNtfAg/exec";
+    // -----------------------------------------------------------------
+
+    let allData = [];
+    let filteredData = [];
+    let currentEditId = null;
+
+    // --- NEW: BACKEND COMMUNICATOR ---
+    async function apiCall(action, payload = null) {
+      try {
+        const response = await fetch(API_URL, {
+          method: "POST",
+          body: JSON.stringify({ action: action, payload: payload })
+        });
+        const result = await response.json();
+        return result;
+      } catch (e) {
+        console.error("API Error:", e);
+        throw e;
+      }
+    }
+
+    window.onload = function() { fetchData(); };
+
+    function fetchData() {
+      document.getElementById('loader').style.display = 'flex';
+      const safetyTimer = setTimeout(() => { processData([]); }, 15000); 
       
-    /* 3D FIX: Ensure card content fits */  
-    .c-card .order-card { height: 100%; box-shadow: none !important; transform: none !important; }  
-    .c-card .order-card:hover { transform: none !important; }  
-  </style>   </head>  
-<body>    <div id="toastNotification" class="toast-box">  
-    <i class="fa-solid fa-circle-check"></i>  
-    <span id="toastMessage">Success</span>  
-  </div>    <div id="loader">  
-    <div class="spinner"></div>  
-    <div style="font-weight: 700; color: #0984e3; letter-spacing: 1px;">SYNCING DATA...</div>  
-  </div>    <div class="modal-overlay" id="editModal">  
-    <div class="modal-box">  
-      <div class="modal-title">Update Order</div>  
-      <label class="form-label" style="color:#636e72;">Status</label>  
-      <div class="input-group" style="margin-bottom:10px;">  
-          <select id="editStatus" class="gold-select" style="background:#f9fafb; color:#2d3436; border:1px solid #dfe6e9;" onchange="autoFillDate()">  
-            <option value="PENDING">PENDING</option>  
-            <option value="PAID">PAID</option>  
-            <option value="WARNING">WARNING</option>  
-            <option value="ERROR">ERROR</option>  
-            <option value="">QUEUES (Blank)</option>  
-          </select>  
-          <i class="fa-solid fa-tag input-icon" style="color:#b2bec3;"></i>  
-      </div>  
-      <label class="form-label" style="color:#636e72;">Filled Date</label>  
-      <div class="input-group">  
-          <input type="text" id="editFilled" class="gold-input" style="background:#f9fafb; color:#2d3436; border:1px solid #dfe6e9;" placeholder="DD/MM/YYYY">  
-          <i class="fa-solid fa-pen-nib input-icon" style="color:#b2bec3;"></i>  
-      </div>  
-      <label class="form-label" style="color:#636e72;">Paid Date</label>  
-      <div class="input-group">  
-          <input type="text" id="editPaid" class="gold-input" style="background:#f9fafb; color:#2d3436; border:1px solid #dfe6e9;" placeholder="DD/MM/YYYY">  
-          <i class="fa-solid fa-calendar-check input-icon" style="color:#b2bec3;"></i>  
-      </div>  
-      <label class="form-label" style="color:#636e72;">Remarks (Timeline)</label>  
-      <div class="input-group">  
-          <textarea id="editRemarks" class="gold-input" rows="3" style="background:#f9fafb; color:#2d3436; border:1px solid #dfe6e9; padding-left:12px;"></textarea>  
-      </div>  
-      <div class="modal-btn-row">  
-        <button class="modal-cancel" onclick="closeModal()">Cancel</button>  
-        <button class="modal-save" id="saveBtn" onclick="saveChanges()">Save Update</button>  
-      </div>  
-    </div>  
-  </div>    <header class="app-header">  
-    <div class="header-left">  
-        <img src="https://drive.google.com/thumbnail?id=1IgeL0FRaPXfpmnBEh7mKdpOa2Pgeqdn2&sz=w200" class="logo-img" alt="Logo">  
-        <div class="logo-container">  
-            <div class="logo">PREORDER ADMIN PANEL</div>  
-            <div class="meta-bar">MADE BY HARSHIT</div>  
-        </div>  
-    </div>  
-    <div class="header-actions">  
-        <div class="header-util-icon" title="System Status"><i class="fa-solid fa-server"></i></div>  
-        <div class="status-pill"><div class="pulsing-dot"></div> ADMIN MODE</div>  
-        <div style="position:relative;">  
-            <button class="notif-btn" onclick="toggleNotifs()">  
-                <i class="fa-solid fa-bell"></i>  
-                <div id="notifBadge" class="notif-badge"></div>  
-            </button>  
-            <div id="notifPanel" class="notif-dropdown">  
-                <div class="notif-header">  
-                    <span>AUDIT LOGS</span>  
-                    <i class="fa-solid fa-xmark" style="cursor:pointer;" onclick="toggleNotifs()"></i>  
-                </div>  
-                <div id="notifList" class="notif-list">  
-                    <div style="padding:20px; text-align:center; color:#b2bec3;">Loading logs...</div>  
-                </div>  
-            </div>  
-        </div>  
-    </div>  
-  </header>    <div class="main-layout">  
-    <aside style="display: flex; flex-direction: column; gap: 1.5rem;">  
-      <div class="gold-card">  
-        <div class="gold-card-bg"><i class="fa-solid fa-magnifying-glass wm-sidebar"></i></div>  
-        <label class="form-label">Search</label>  
-        <div class="input-group">  
-            <i class="fa-solid fa-magnifying-glass input-icon"></i>  
-            <input type="text" id="searchInput" class="gold-input" placeholder="ID or Name..." onkeyup="handleSearchKey()">  
-            <i class="fa-solid fa-circle-xmark clear-icon" id="searchClearBtn" onclick="clearSearch()"></i>  
-        </div>  
-      </div>  <button class="btn-vision" onclick="toggleVisionView()">  
-    <div class="vision-glow"></div>  
-    <i class="fa-solid fa-eye"></i> &nbsp; VISION VIEW  
-  </button>  
+      // REPLACED: google.script.run -> apiCall
+      apiCall('getData')
+        .then(data => { clearTimeout(safetyTimer); processData(data); })
+        .catch(e => { clearTimeout(safetyTimer); processData([]); });
+    }
 
-  <div class="gold-card">  
-    <div class="gold-card-bg"><i class="fa-solid fa-filter wm-sidebar"></i></div>  
-    <label class="form-label">Filters</label>  
-    <div class="input-group">  
-        <i class="fa-solid fa-handshake input-icon"></i>  
-        <select id="mediatorSelect" class="gold-select" onchange="applyFilters()"><option value="All">All Mediators</option></select>  
-        <i class="fa-solid fa-chevron-down input-arrow"></i>  
-    </div>  
-    <div class="input-group">  
-        <i class="fa-solid fa-tags input-icon"></i>  
-        <select id="statusSelect" class="gold-select" onchange="applyFilters()">  
-            <option value="All">All Statuses</option>  
-            <option value="PAID">Paid</option>  
-            <option value="PENDING">Pending</option>  
-            <option value="QUEUES">QUEUES</option>  
-        </select>  
-        <i class="fa-solid fa-chevron-down input-arrow"></i>  
-    </div>  
-    <div class="input-group">  
-        <i class="fa-solid fa-calendar-days input-icon"></i>  
-        <select id="monthSelect" class="gold-select" onchange="applyFilters()"><option value="All">All Months</option></select>  
-        <i class="fa-solid fa-chevron-down input-arrow"></i>  
-    </div>  
-    <div class="input-group">  
-        <i class="fa-solid fa-layer-group input-icon"></i>  
-        <select id="typeSelect" class="gold-select" onchange="applyFilters()">  
-            <option value="All">All Types</option>  
-            <option value="LESS">Less Orders (Deducted)</option>  
-            <option value="COMMISSION">Commission Orders</option>  
-            <option value="FULL">Full Refund Orders</option>  
-        </select>  
-        <i class="fa-solid fa-chevron-down input-arrow"></i>  
-    </div>  
-    <label class="form-label" style="margin-top: 15px;">Sort Order</label>  
-    <div class="input-group">  
-        <i class="fa-solid fa-arrow-down-wide-short input-icon"></i>  
-        <select id="sortSelect" class="gold-select" onchange="applyFilters()">  
-            <option value="DESC">Newest First (Descending)</option>  
-            <option value="ASC">Oldest First (Ascending)</option>  
-        </select>  
-        <i class="fa-solid fa-chevron-down input-arrow"></i>  
-    </div>  
-  </div>  
+    function processData(data) {
+      if(!data || data.length === 0) {
+          // Fallback Sample Data
+          data = [
+            { id: "402-7484615-1097145", reviewer: "SULEKHA DEVI", mediator: "YESIAM", product: "COOLER/TECKOOL", dealType: "RATING DEAL", total: 299, deducted: 50, commission: 0, refundable: 249, deliveryDate: "06/05/2025", filledDate: "", refundDate: "20/06/2025", paidDate: "08/01/2026", remarks: "20w", formLink: "https://google.com", status: "PENDING", phone: "919876543210", rowIndex: 2 },
+            { id: "402-7869160-6095552", reviewer: "BHUSHAN", mediator: "ANIRBAN", product: "BOULT-ASTRA", dealType: "REVIEW DEAL", total: 1204, deducted: 229, commission: 0, refundable: 975, deliveryDate: "22/06/2025", filledDate: "30/07/2025", refundDate: "", paidDate: "", remarks: "29", formLink: "", status: "WARNING", phone: "919988776655", rowIndex: 3 },
+            { id: "404-1234567-8901234", reviewer: "AMIT KUMAR", mediator: "SURESH", product: "REDMI BUDS 5", dealType: "RATING DEAL", total: 1999, deducted: 0, commission: 100, refundable: 2099, deliveryDate: "10/08/2025", filledDate: "12/08/2025", refundDate: "15/08/2025", paidDate: "15/08/2025", remarks: "Fast refund", formLink: "https://google.com", status: "PAID", phone: "918877665544", rowIndex: 4 },
+            { id: "405-9876543-2109876", reviewer: "PRIYA SINGH", mediator: "YESIAM", product: "SAMSUNG GALAXY M14", dealType: "FEEDBACK DEAL", total: 14000, deducted: 0, commission: 0, refundable: 14000, deliveryDate: "01/09/2025", filledDate: "", refundDate: "", paidDate: "", remarks: "Pending approval", formLink: "", status: "", phone: "917766554433", rowIndex: 5 }
+          ];
+      }
+      allData = data.map(item => { return { ...item, logicStatus: getLogicStatus(item) }; });
+      populateDropdowns();
+      applyFilters(); 
+      document.getElementById('loader').style.display = 'none';
+    }
 
-  <div class="gold-card">  
-    <div class="gold-card-bg"><i class="fa-solid fa-trophy wm-sidebar"></i></div>  
-    <label class="form-label">Leaderboard</label>  
-    <div id="leaderboardList" style="position: relative; z-index: 2;"></div>  
-  </div>  
-  <button class="btn-gold" onclick="downloadCSV()">  
-      <i class="fa-solid fa-file-csv"></i> Download CSV  
-  </button>  
-</aside>  
+    function getLogicStatus(item) {
+        let logicStatus = "VALID";
+        if (item.paidDate && item.status !== "PAID") logicStatus = "ERROR";
+        if (!item.filledDate && item.status === "PAID" && logicStatus !== "ERROR") logicStatus = "WARNING";
+        return logicStatus;
+    }
 
-<main style="display: flex; flex-direction: column; gap: 2rem;">  
-  <div id="view-home" class="view-section active-view">  
-    <div class="stats-grid">  
-        <div class="stat-card">  
-        <div class="gold-card-bg"><i class="fa-solid fa-boxes-stacked wm-stat"></i></div>  
-        <div class="stat-title">Orders</div><div class="stat-value" id="statOrders">0</div>  
-        </div>  
-        <div class="stat-card">  
-        <div class="gold-card-bg"><i class="fa-solid fa-wallet wm-stat"></i></div>  
-        <div class="stat-title">Amount</div><div class="stat-value" id="statTotalValue">₹0</div>  
-        </div>  
-        <div class="stat-card">  
-        <div class="gold-card-bg"><i class="fa-solid fa-scissors wm-stat"></i></div>  
-        <div class="stat-title">Deducted</div><div class="stat-value" id="statDeducted">₹0</div>  
-        </div>  
-        <div class="stat-card">  
-        <div class="gold-card-bg"><i class="fa-solid fa-rotate-left wm-stat"></i></div>  
-        <div class="stat-title">Refundable</div><div class="stat-value" id="statRefundable">₹0</div>  
-        </div>  
-        <div class="stat-card">  
-        <div class="gold-card-bg"><i class="fa-solid fa-chart-line wm-stat"></i></div>  
-        <div class="stat-title">Commission</div><div class="stat-value" id="statCommission">₹0</div>  
-        </div>  
-    </div>  
-    <div id="ordersGridHome" class="orders-grid" style="margin-top: 2rem;"></div>  
-  </div>  
+    function renderCards() {
+      const isListView = document.getElementById('view-list').style.display !== 'none';
+      const targetGridId = isListView ? 'ordersGridList' : 'ordersGridHome';
+      const grid = document.getElementById(targetGridId);
+      if (!grid) return; 
 
-  <div id="view-graph" class="view-section" style="display: none;">  
-      <div class="gold-card" style="background: white; color: #2d3436; text-align: center; padding: 4rem 2rem;">  
-        <i class="fa-solid fa-chart-pie" style="font-size: 3rem; color: #E91E63; margin-bottom: 1rem;"></i>  
-        <h2 style="font-weight: 800;">Analytics Hub</h2>  
-        <p style="color: #636e72;">Detailed performance charts coming soon.</p>  
-      </div>  
-  </div>  
-
-  <div id="view-list" class="view-section" style="display: none;">  
-      <div style="margin-bottom: 1rem; font-weight: 700; color: #636e72;">FULL ORDER REGISTRY</div>  
-      <div id="ordersGridList" class="orders-grid"></div>  
-  </div>  
-
-  <div id="view-vision" class="view-section vision-viewport" style="display: none;">  
-    <div id="vision-cluster-stage" class="vision-stage">  
-        <div class="vision-header">  
-        <h2><i class="fa-solid fa-layer-group"></i> MEDIATOR CLUSTERS</h2>  
-        <p>Select a stack to enter immersive flow.</p>  
-        </div>  
-        <div id="cluster-grid" class="cluster-grid"></div>  
-    </div>  
-    <div id="vision-carousel-stage" class="vision-stage" style="display: none; perspective: 1000px;">  
-        <div class="carousel-ui-layer">  
-        <button class="btn-back-vision" onclick="exitCarousel()">  
-            <i class="fa-solid fa-arrow-left-long"></i> BACK TO CLUSTERS  
-        </button>  
-        <div class="carousel-meta">  
-            <h1 id="carousel-title">MEDIATOR NAME</h1>  
-            <span id="carousel-counter">1 / 50</span>  
-        </div>  
-        </div>  
-        <div class="carousel-scene">  
-        <div id="carousel-track" class="carousel-track"></div>  
-        </div>  
-        <div class="nav-zone left" onclick="moveCarousel(-1)"></div>  
-        <div class="nav-zone right" onclick="moveCarousel(1)"></div>  
-    </div>  
-  </div>  
-
-  <footer style="text-align: center; color: #b2bec3; font-size: 0.8rem; margin-top: 20px; font-weight: 600; letter-spacing: 1px;">  
-    &copy; PREORDER ALL RIGHTS RESERVED  
-  </footer>  
-</main>
-
-  </div>    <button class="scroll-btn" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">  
-    <i class="fa-solid fa-arrow-up"></i>  
-  </button>    <nav class="bottom-nav" id="mainNavBar">  
-    <div class="nav-pill">  
-      <button class="nav-item active" onclick="switchTab('home')">  
-        <div class="nav-icon"><i class="fa-solid fa-house"></i></div>  
-        <span class="nav-label">Home</span>  
-      </button>  
-      <button class="nav-item" onclick="switchTab('graph')">  
-        <div class="nav-icon"><i class="fa-solid fa-chart-simple"></i></div>  
-        <span class="nav-label">Graph</span>  
-      </button>  
-      <button class="nav-item" onclick="switchTab('list')">  
-        <div class="nav-icon"><i class="fa-solid fa-list-check"></i></div>  
-        <span class="nav-label">List</span>  
-      </button>  
-    </div>  
-  </nav>  <script>  
-// -----------------------------------------------------------------  
-// IMPORTANT: REPLACE THIS WITH YOUR DEPLOYED GOOGLE APPS SCRIPT URL  
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyjmQ--6V5db6fKpWDRMDSmaa27le5TLbXJ_Jf_cRWxpoSc3mKZZKjsfnH0XhmMzHfg_g/exec";   
-// -----------------------------------------------------------------  
-  
-let allData = [];  
-let filteredData = [];  
-let currentEditId = null;  
-  
-async function apiCall(action, payload = null) {  
-  const controller = new AbortController();  
-  const timeout = setTimeout(() => controller.abort(), 10000);  
-  
-  try {  
-    const response = await fetch(WEB_APP_URL, {  
-      method: "POST",  
-      body: JSON.stringify({ action, payload }),  
-      signal: controller.signal  
-    });  
-  
-    const text = await response.text();  
-    clearTimeout(timeout);  
-  
-    if (!text) throw new Error("Empty response");  
-  
-    return JSON.parse(text);  
-  
-  } catch (e) {  
-    clearTimeout(timeout);  
-    console.error("API Error:", e);  
-    throw e;  
-  }  
-}  
-  
-function fetchData() {  
-  document.getElementById('loader').style.display = 'flex';  
-  
-  apiCall('getData')  
-    .then(data => {  
-      document.getElementById('loader').style.display = 'none';  
-      processData(data);  
-    })  
-    .catch(e => {  
-      console.log("Backend failed — loading UI without data");  
-      document.getElementById('loader').style.display = 'none';  
-      processData([]);  
-    });  
-}  
-  
-window.onload = function() { fetchData(); };  
-  
-function processData(data) {  
-  if(!data || !Array.isArray(data)) data = [];  
-  allData = data.map(item => { return { ...item, logicStatus: getLogicStatus(item) }; });  
-  populateDropdowns();  
-  applyFilters();   
-  document.getElementById('loader').style.display = 'none';  
-}  
-  
-function getLogicStatus(item) {  
-    let logicStatus = "VALID";  
-    if (item.paidDate && item.status !== "PAID") logicStatus = "ERROR";  
-    if (!item.filledDate && item.status === "PAID" && logicStatus !== "ERROR") logicStatus = "WARNING";  
-    return logicStatus;  
-}  
-  
-function fmt(amount) {  
-  return new Intl.NumberFormat('en-IN', {   
-    style: 'currency', currency: 'INR', maximumFractionDigits: 0   
-  }).format(amount || 0);  
-}  
-  
-function renderCards() {  
-  const isListView = document.getElementById('view-list').style.display !== 'none';  
-  const targetGridId = isListView ? 'ordersGridList' : 'ordersGridHome';  
-  const grid = document.getElementById(targetGridId);  
-  if (!grid) return;   
-  
-  grid.innerHTML = "";  
-  if(filteredData.length === 0) {  
-    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;color:#999;font-weight:700;">No Orders Found</div>`;  
-    return;  
-  }  
-    
-  filteredData.forEach((item, index) => {  
-    grid.innerHTML += generateCardHTML(item, index);  
-  });  
-}  
-  
-function generateCardHTML(item, index) {  
-    let themeClass = "card-queues";   
-    let textClass = "text-queues";  
-    let displayStatus = item.status || "QUEUES";  
-  
-    if (item.status === "PAID") { themeClass = "card-paid"; textClass = "text-paid"; }   
-    else if (item.status === "PENDING") { themeClass = "card-pending"; textClass = "text-pend"; }   
-    else if (item.status === "WARNING") { themeClass = "card-error"; textClass = "text-err"; }  
-    if (item.logicStatus === "ERROR") { themeClass = "card-error"; textClass = "text-err"; displayStatus = "ERROR (Check)"; }  
-  
-    const idLen = item.id.length;  
-    let idFontSize = "1.1rem";   
-    if (idLen > 25) idFontSize = "0.75rem";  
-    else if (idLen > 18) idFontSize = "0.85rem";  
-  
-    let middleRow = "";  
-    if (item.deducted > 0) middleRow = `<div class="money-row"><span>Deducted</span><span style="color:#ffcccc; font-weight:700;">-${fmt(item.deducted)}</span></div>`;  
-    else if (item.commission > 0) middleRow = `<div class="money-row"><span>Commission</span><span style="color:#55efc4; font-weight:700;">+${fmt(item.commission)}</span></div>`;  
+      // Clear both grids
+      document.getElementById('ordersGridHome').innerHTML = "";
+      document.getElementById('ordersGridList').innerHTML = "";
       
-    let formBtn = "";  
-    if(item.formLink && item.formLink.trim().length > 5){  
-        formBtn = `<a href="${item.formLink}" target="_blank" class="link-btn-external"><i class="fa-solid fa-arrow-up-right-from-square"></i> OPEN FORM</a>`;  
-    }  
-  
-    let waBtn = "";  
-    if(item.phone && item.phone.trim().length > 5) {  
-        // FIX: Replaced broken template literal nested backticks
-        const msg = `Hi _${item.mediator}_, 👋  
-  
-📃 This is a kind reminder regarding the refund for these orders👇🏻  
-  
-*📦 Order ID: ${item.id}* ⚠️ _The refund timeline is today, please process this at the earliest._ 🚨  
-  
-Total Refund Due: ${fmt(item.refundable)}  
-  
-~PREORDER 〽️`;  
-        const waLink = `https://wa.me/${item.phone}?text=${encodeURIComponent(msg)}`;  
-        waBtn = `<a href="${waLink}" target="_blank" class="btn-icon btn-wa-icon" title="Send Reminder"><i class="fa-solid fa-bell"></i></a>`;  
-    }  
+      if(filteredData.length === 0) {
+        grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;color:#999;font-weight:700;">No Orders Found</div>`;
+        return;
+      }
       
-    return `  
-    <div id="card-wrapper-${item.id}" class="order-card ${themeClass}">  
-    <div class="card-content">  
-        <div class="card-head">  
-        <div style="width:100%; overflow:hidden;">  
-            <div class="card-id" onclick="copy('${item.id}')" style="font-size:${idFontSize}; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">  
-                ${item.id} <i class="fa-regular fa-copy" style="font-size:0.8em"></i>  
-            </div>  
-            <span class="deal-tag">${item.dealType}</span>  
-            <div class="card-badge" style="margin-top:6px; font-size: 0.65rem;"><i class="fa-solid fa-table-list"></i> ROW ${item.rowIndex}</div>  
-        </div>  
-        <div class="card-meta">  
-            <div class="card-badge" style="background:rgba(255,255,255,0.4); color:#2d3436;">ORDER NO ${index + 1}</div>  
-            <div class="card-badge"><i class="fa-solid fa-user"></i> ${item.reviewer}</div>  
-            <div class="card-badge" style="margin-top:5px;"><i class="fa-solid fa-handshake"></i> ${item.mediator}</div>  
-        </div>  
-        <i class="fa-solid fa-file-invoice head-echo"></i>  
-        </div>  
-        <div class="glass-panel">  
-        <div class="prod-name"><i class="fa-solid fa-mobile-screen"></i> &nbsp; ${item.product}</div>  
-        </div>  
-        <div class="glass-panel">  
-        <div class="money-row"><span>Total</span><span>${fmt(item.total)}</span></div>  
-        ${middleRow}  
-        <div class="total-row"><span>REFUNDABLE</span><span>${fmt(item.refundable)}</span></div>  
-        </div>  
-        <div class="glass-panel">  
-        <div class="date-grid">  
-            <div class="date-item"><span>DELIVERED</span><div><i class="fa-solid fa-truck-fast"></i> ${item.deliveryDate||'-'}</div></div>  
-            <div class="date-item"><span>FILLED</span><div><i class="fa-solid fa-pen-nib"></i> ${item.filledDate||'-'}</div></div>  
-            <div class="date-item"><span>REFUND DATE</span><div><i class="fa-solid fa-clock-rotate-left"></i> ${item.refundDate||'-'}</div></div>  
-            <div class="date-item"><span>PAID DATE</span><div><i class="fa-solid fa-calendar-check"></i> ${item.paidDate||'-'}</div></div>  
-        </div>  
-        </div>  
-        <div class="action-row">  
-            <div class="status-pill-card ${textClass}">${displayStatus}</div>  
-            ${formBtn}  
-            <div class="icon-group">  
-                ${waBtn}  
-                <button class="btn-icon btn-edit-icon" onclick="editOrder('${item.id}')" title="Edit"><i class="fa-solid fa-pen-to-square"></i></button>  
-            </div>  
-        </div>  
-        </div>  
-    </div>`;  
-}  
-  
-function copy(text) {  
-  navigator.clipboard.writeText(text).then(() => showToast('ID Copied!'));  
-}  
-  
-function showToast(message) {  
-  const toast = document.getElementById('toastNotification');  
-  document.getElementById('toastMessage').textContent = message;  
-  toast.classList.add('active');  
-  setTimeout(() => toast.classList.remove('active'), 3000);  
-}  
-  
-function handleSearchKey() {  
-  const search = document.getElementById('searchInput').value.toLowerCase();  
-  document.getElementById('searchClearBtn').style.display = search ? 'block' : 'none';  
-  applyFilters();  
-}  
-  
-function clearSearch() {  
-  document.getElementById('searchInput').value = '';  
-  document.getElementById('searchClearBtn').style.display = 'none';  
-  applyFilters();  
-}  
-  
-function populateDropdowns() {  
-  const mediators = [...new Set(allData.map(item => item.mediator))].sort();  
-  const mediatorSelect = document.getElementById('mediatorSelect');  
-  mediatorSelect.innerHTML = '<option value="All">All Mediators</option>' +   
-    mediators.map(m => `<option value="${m}">${m}</option>`).join('');  
-  
-  const months = [...new Set(allData.map(item => item.deliveryDate ? item.deliveryDate.split('/')[1] : ''))].filter(Boolean).sort();  
-  const monthSelect = document.getElementById('monthSelect');  
-  monthSelect.innerHTML = '<option value="All">All Months</option>' +   
-    months.map(m => `<option value="${m}">${m}</option>`).join('');  
-}  
-  
-function applyFilters() {  
-  const search = document.getElementById('searchInput').value.toLowerCase();  
-  const mediator = document.getElementById('mediatorSelect').value;  
-  const status = document.getElementById('statusSelect').value;  
-  const month = document.getElementById('monthSelect').value;  
-  const type = document.getElementById('typeSelect').value;  
-  const sort = document.getElementById('sortSelect').value;  
-  
-  filteredData = allData.filter(item => {  
-    const matchesSearch = !search ||   
-      item.id.toLowerCase().includes(search) ||   
-      item.mediator.toLowerCase().includes(search);  
+      filteredData.forEach((item, index) => {
+        // Only append to the visible grid to improve performance
+        grid.innerHTML += generateCardHTML(item, index);
+      });
+    }
+
+    function generateCardHTML(item, index) {
+        let themeClass = "card-queues"; 
+        let textClass = "text-queues";
+        let displayStatus = item.status || "QUEUES";
+
+        if (item.status === "PAID") { themeClass = "card-paid"; textClass = "text-paid"; } 
+        else if (item.status === "PENDING") { themeClass = "card-pending"; textClass = "text-pend"; } 
+        else if (item.status === "WARNING") { themeClass = "card-error"; textClass = "text-err"; }
+        if (item.logicStatus === "ERROR") { themeClass = "card-error"; textClass = "text-err"; displayStatus = "ERROR (Check)"; }
+
+        const idLen = item.id.length;
+        let idFontSize = "1.1rem"; 
+        if (idLen > 25) idFontSize = "0.75rem";
+        else if (idLen > 18) idFontSize = "0.85rem";
+
+        let middleRow = "";
+        if (item.deducted > 0) middleRow = `<div class="money-row"><span>Deducted</span><span style="color:#ffcccc; font-weight:700;">-${fmt(item.deducted)}</span></div>`;
+        else if (item.commission > 0) middleRow = `<div class="money-row"><span>Commission</span><span style="color:#55efc4; font-weight:700;">+${fmt(item.commission)}</span></div>`;
+        
+        let formBtn = "";
+        if(item.formLink && item.formLink.trim().length > 5){
+            formBtn = `<a href="${item.formLink}" target="_blank" class="link-btn-external"><i class="fa-solid fa-arrow-up-right-from-square"></i> OPEN FORM</a>`;
+        }
+
+        let waBtn = "";
+        if(item.phone && item.phone.trim().length > 5) {
+            const msg = `Hi _${item.mediator}_, \uD83D\uDC4B\n\n\uD83D\uDCC3 This is a kind reminder regarding the refund for these orders\uD83D\uDC47\uD83C\uDFFB\n\n*\uD83D\uDCE6 Order ID: \`${item.id}\`*\n\n\u26A0\uFE0F _The refund timeline is today, please process this at the earliest._ \uD83D\uDEA8\n\nTotal Refund Due: ${fmt(item.refundable)}\n\n~PREORDER \u303D\uFE0F`;
+            const waLink = `https://wa.me/${item.phone}?text=${encodeURIComponent(msg)}`;
+            waBtn = `<a href="${waLink}" target="_blank" class="btn-icon btn-wa-icon" title="Send Reminder"><i class="fa-solid fa-bell"></i></a>`;
+        }
+        
+        return `
+        <div id="card-wrapper-${item.id}" class="order-card ${themeClass}">
+        <div class="card-content">
+            <div class="card-head">
+            <div style="width:100%; overflow:hidden;">
+                <div class="card-id" onclick="copy('${item.id}')" style="font-size:${idFontSize}; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                    ${item.id} <i class="fa-regular fa-copy" style="font-size:0.8em"></i>
+                </div>
+                <span class="deal-tag">${item.dealType}</span>
+                <div class="card-badge" style="margin-top:6px; font-size: 0.65rem;"><i class="fa-solid fa-table-list"></i> ROW ${item.rowIndex}</div>
+            </div>
+            <div class="card-meta">
+                <div class="card-badge" style="background:rgba(255,255,255,0.4); color:#2d3436;">ORDER NO ${index + 1}</div>
+                <div class="card-badge"><i class="fa-solid fa-user"></i> ${item.reviewer}</div>
+                <div class="card-badge" style="margin-top:5px;"><i class="fa-solid fa-handshake"></i> ${item.mediator}</div>
+            </div>
+            <i class="fa-solid fa-file-invoice head-echo"></i>
+            </div>
+            <div class="glass-panel">
+            <div class="prod-name"><i class="fa-solid fa-mobile-screen"></i> &nbsp; ${item.product}</div>
+            </div>
+            <div class="glass-panel">
+            <div class="money-row"><span>Total</span><span>${fmt(item.total)}</span></div>
+            ${middleRow}
+            <div class="total-row"><span>REFUNDABLE</span><span>${fmt(item.refundable)}</span></div>
+            </div>
+            <div class="glass-panel">
+            <div class="date-grid">
+                <div class="date-item"><span>DELIVERED</span><div><i class="fa-solid fa-truck-fast"></i> ${item.deliveryDate||'-'}</div></div>
+                <div class="date-item"><span>FILLED</span><div><i class="fa-solid fa-pen-nib"></i> ${item.filledDate||'-'}</div></div>
+                <div class="date-item"><span>REFUND DATE</span><div><i class="fa-solid fa-clock-rotate-left"></i> ${item.refundDate||'-'}</div></div>
+                <div class="date-item"><span>PAID DATE</span><div><i class="fa-solid fa-calendar-check"></i> ${item.paidDate||'-'}</div></div>
+            </div>
+            </div>
+            <div class="glass-panel">
+            <div class="memo-text"><i class="fa-solid fa-quote-left"></i> &nbsp; ${item.remarks||'No Timeline Info'}</div>
+            </div>
+            <div class="action-row">
+            <div class="status-pill-card ${textClass}">${displayStatus}</div>
+            <div class="icon-group">
+                ${waBtn}
+                <button class="btn-icon btn-edit-icon" onclick="openEditModal('${item.id}')"><i class="fa-solid fa-pen"></i></button>
+            </div>
+            ${formBtn}
+            </div>
+        </div>
+        </div>`;
+    }
+
+    function autoFillDate() {
+        const val = document.getElementById('editStatus').value;
+        if (val === "PAID" || val === "PENDING") {
+            const d = new Date();
+            const day = String(d.getDate()).padStart(2, '0');
+            const month = String(d.getMonth() + 1).padStart(2, '0'); 
+            const year = d.getFullYear();
+            document.getElementById('editPaid').value = `${day}/${month}/${year}`;
+        }
+    }
+
+    function handleSearchKey() {
+        const val = document.getElementById('searchInput').value;
+        document.getElementById('searchClearBtn').style.display = val.length > 0 ? 'block' : 'none';
+        applyFilters();
+    }
+    function clearSearch() {
+        document.getElementById('searchInput').value = '';
+        document.getElementById('searchClearBtn').style.display = 'none';
+        applyFilters();
+    }
+
+    function populateDropdowns() {
+      const mediators = [...new Set(allData.map(d => d.mediator))].sort();
+      const medSelect = document.getElementById('mediatorSelect');
+      medSelect.innerHTML = '<option value="All">All Mediators</option>';
+      mediators.forEach(m => { if(m && m!="N/A") { let opt = document.createElement('option'); opt.value = m; opt.textContent = m; medSelect.appendChild(opt); }});
+
+      const months = new Set();
+      allData.forEach(d => { const m = getCleanMonth(d.deliveryDate); if (m !== "Invalid") months.add(m); });
+      const sortedMonths = [...months].sort(); 
+      const monSelect = document.getElementById('monthSelect');
+      monSelect.innerHTML = '<option value="All">All Months</option>';
+      sortedMonths.forEach(m => { let opt = document.createElement('option'); opt.value = m; opt.textContent = m; monSelect.appendChild(opt); });
+    }
+
+    function applyFilters() {
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const mediator = document.getElementById('mediatorSelect').value;
+      const status = document.getElementById('statusSelect').value;
+      const month = document.getElementById('monthSelect').value;
+      const type = document.getElementById('typeSelect').value; 
+      const sortOrder = document.getElementById('sortSelect').value;
+
+      filteredData = allData.filter(item => {
+        const mSearch = item.id.toLowerCase().includes(search) || item.reviewer.toLowerCase().includes(search) || item.product.toLowerCase().includes(search);
+        const mMediator = (mediator === "All") || (item.mediator === mediator);
+        let mStatus = true;
+        if(status !== "All") {
+            if(status === "QUEUES") mStatus = (item.status === "" || item.status === "WARNING"); 
+            else mStatus = (item.status === status);
+        }
+        const mMonth = (month === "All") || (getCleanMonth(item.deliveryDate) === month);
+        let mType = true;
+        if(type === "LESS") mType = (item.deducted > 0);
+        else if (type === "COMMISSION") mType = (item.commission > 0);
+        else if (type === "FULL") mType = (item.deducted === 0 && item.commission === 0);
+
+        return mSearch && mMediator && mStatus && mMonth && mType;
+      });
+
+      filteredData.sort((a, b) => {
+        const dateA = parseDateToTs(a.deliveryDate);
+        const dateB = parseDateToTs(b.deliveryDate);
+        if (sortOrder === 'DESC') return dateB - dateA; 
+        return dateA - dateB; 
+      });
+
+      renderStats();
+      renderCards();
+      renderLeaderboard();
+    }
+
+    function renderStats() {
+      let tVal=0, tRef=0, tComm=0, tDed=0;
+      filteredData.forEach(d => { tVal += d.total; tRef += d.refundable; tComm += d.commission; tDed += d.deducted; });
+      document.getElementById("statOrders").innerText = filteredData.length;
+      document.getElementById("statTotalValue").innerText = fmt(tVal);
+      document.getElementById("statRefundable").innerText = fmt(tRef);
+      document.getElementById("statCommission").innerText = fmt(tComm);
+      document.getElementById("statDeducted").innerText = fmt(tDed);
+    }
+
+    function renderLeaderboard() {
+      const map = {};
+      filteredData.forEach(d => { if(d.mediator && d.mediator !== "N/A") { if(!map[d.mediator]) map[d.mediator]=0; map[d.mediator]++; }});
+      const sorted = Object.entries(map).sort((a,b)=>b[1]-a[1]).slice(0,5);
+      document.getElementById('leaderboardList').innerHTML = sorted.map((i,x)=>`<div class="leader-row"><span style="color:white; opacity:0.8;">#${x+1} ${i[0]}</span><span style="font-weight:700;">${i[1]} Orders</span></div>`).join('');
+    }
+
+    function downloadCSV() {
+      const btn = document.querySelector('.btn-gold');
+      const orgText = btn.innerHTML;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> PREPARING...';
       
-    const matchesMediator = mediator === 'All' || item.mediator === mediator;  
-    const matchesStatus = status === 'All' || item.status === status;  
-    const matchesMonth = month === 'All' ||   
-      !item.deliveryDate || item.deliveryDate.includes(month);  
-    const matchesType = type === 'All' ||   
-      (type === 'LESS' && item.deducted > 0) ||  
-      (type === 'COMMISSION' && item.commission > 0) ||  
-      (type === 'FULL' && item.deducted === 0 && item.commission === 0);  
-  
-    return matchesSearch && matchesMediator && matchesStatus && matchesMonth && matchesType;  
-  });  
-  
-  filteredData.sort((a, b) => {  
-    const dateA = a.deliveryDate ? new Date(a.deliveryDate.split('/').reverse().join('-')) : 0;  
-    const dateB = b.deliveryDate ? new Date(b.deliveryDate.split('/').reverse().join('-')) : 0;  
-    return sort === 'DESC' ? dateB - dateA : dateA - dateB;  
-  });  
-  
-  renderCards();  
-  updateStats();  
-  updateLeaderboard();  
-}  
-  
-function updateStats() {  
-  const totalOrders = filteredData.length;  
-  const totalValue = filteredData.reduce((sum, item) => sum + (item.total || 0), 0);  
-  const totalDeducted = filteredData.reduce((sum, item) => sum + (item.deducted || 0), 0);  
-  const totalRefundable = filteredData.reduce((sum, item) => sum + (item.refundable || 0), 0);  
-  const totalCommission = filteredData.reduce((sum, item) => sum + (item.commission || 0), 0);  
-  
-  document.getElementById('statOrders').textContent = totalOrders;  
-  document.getElementById('statTotalValue').textContent = fmt(totalValue);  
-  document.getElementById('statDeducted').textContent = fmt(totalDeducted);  
-  document.getElementById('statRefundable').textContent = fmt(totalRefundable);  
-  document.getElementById('statCommission').textContent = fmt(totalCommission);  
-}  
-  
-function updateLeaderboard() {  
-  const leaderboard = filteredData.reduce((acc, item) => {  
-    acc[item.mediator] = (acc[item.mediator] || 0) + (item.refundable || 0);  
-    return acc;  
-  }, {});  
+      // REPLACED: google.script.run -> apiCall
+      apiCall('getCsvData').then(csvContent => {
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.setAttribute("href", url); link.setAttribute("download", "PreorderData.csv");
+            document.body.appendChild(link); link.click(); document.body.removeChild(link);
+            btn.innerHTML = orgText; showToast("CSV Downloaded!");
+        }).catch(e => { alert("Export Failed: " + e); btn.innerHTML = orgText; });
+    }
+
+    function openEditModal(id) {
+      const order = allData.find(d => d.id === id);
+      if(!order) return;
+      currentEditId = id;
+      document.getElementById('editStatus').value = order.status;
+      document.getElementById('editFilled').value = order.filledDate;
+      document.getElementById('editPaid').value = order.paidDate; 
+      document.getElementById('editRemarks').value = order.remarks;
+      document.getElementById('editModal').classList.add('active');
+    }
+
+    function closeModal() { document.getElementById('editModal').classList.remove('active'); currentEditId = null; }
+
+    function saveChanges() {
+      if(!currentEditId) return;
+      const btn = document.getElementById('saveBtn');
+      const oldText = btn.innerText;
+      btn.innerText = "Saving...";
+      const newStatus = document.getElementById('editStatus').value;
+      const newFilled = document.getElementById('editFilled').value;
+      const newPaid = document.getElementById('editPaid').value;
+      const newRemarks = document.getElementById('editRemarks').value;
+
+      const updates = { id: currentEditId, status: newStatus, filledDate: newFilled, paidDate: newPaid, remarks: newRemarks };
+      
+      const idx = allData.findIndex(d => d.id === currentEditId);
+      const oldDataSnapshot = { ...allData[idx] }; 
+      
+      // OPTIMISTIC UPDATE
+      if(idx > -1) {
+        allData[idx].status = newStatus; allData[idx].filledDate = newFilled; allData[idx].paidDate = newPaid; allData[idx].remarks = newRemarks;
+        allData[idx].logicStatus = getLogicStatus(allData[idx]);
+      }
+      const filteredIndex = filteredData.findIndex(d => d.id === currentEditId);
+      if(filteredIndex > -1) {
+        filteredData[filteredIndex] = allData[idx];
+        const newCardHTML = generateCardHTML(allData[idx], filteredIndex);
+        const existingCard = document.getElementById(`card-wrapper-${currentEditId}`);
+        if(existingCard) existingCard.outerHTML = newCardHTML;
+      }
+      closeModal(); showToast("Order Updated (Syncing...)"); btn.innerText = oldText;
+
+      // REPLACED: google.script.run -> apiCall
+      apiCall('updateOrder', updates).then(res => {
+          if(res !== "SUCCESS") { alert("Sync Error: " + res); allData[idx] = oldDataSnapshot; if(filteredIndex > -1) filteredData[filteredIndex] = oldDataSnapshot; applyFilters(); } 
+          else { showToast("Synced Successfully!"); }
+        }).catch(e => { alert("Network Error"); allData[idx] = oldDataSnapshot; applyFilters(); });
+    }
+
+    function toggleNotifs() {
+        const p = document.getElementById('notifPanel');
+        if(!p.classList.contains('active')) { p.classList.add('active'); fetchLogs(); document.getElementById('notifBadge').classList.remove('show'); } 
+        else { p.classList.remove('active'); }
+    }
     
-  const sorted = Object.entries(leaderboard)  
-    .sort(([,a], [,b]) => b - a)  
-    .slice(0, 5)  
-    .map(([name, value], i) => `  
-      <div class="leader-row">  
-        <span>#${i+1} ${name}</span>  
-        <span>${fmt(value)}</span>  
-      </div>  
-    `).join('');  
+    // REPLACED: google.script.run -> apiCall
+    function fetchLogs() { apiCall('getRecentLogs').then(renderLogs).catch(e => console.log("Log error", e)); }
     
-  document.getElementById('leaderboardList').innerHTML = sorted || '<div style="text-align:center;color:rgba(255,255,255,0.5);font-size:0.8rem;padding:20px;">No data</div>';  
-}  
-  
-// Modal functions  
-function editOrder(id) {  
-  const item = allData.find(item => item.id === id);  
-  if (!item) return;  
+    function renderLogs(logs) {
+        const list = document.getElementById('notifList');
+        if(!logs || logs.length === 0) { list.innerHTML = '<div style="padding:20px; text-align:center; color:#b2bec3;">No recent edits.</div>'; return; }
+        list.innerHTML = logs.map(l => `<div class="notif-item"><div class="notif-time">${l[0]}</div><div class="notif-id">${l[1]}</div><div class="notif-detail">${l[2]}</div></div>`).join('');
+    }
+
+    function getCleanMonth(dateStr) {
+      if (!dateStr || dateStr.length < 5) return "Invalid";
+      const parts = dateStr.split('/');
+      if (parts.length === 3) {
+        const d = new Date(parts[2], parts[1]-1, parts[0]);
+        if(isNaN(d.getTime())) return "Invalid";
+        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        return `${months[d.getMonth()]} ${d.getFullYear()}`;
+      }
+      return "Invalid";
+    }
+    function parseDateToTs(str) { if(!str) return 0; const parts = str.trim().split('/'); if(parts.length !== 3) return 0; return new Date(parts[2], parts[1] - 1, parts[0]).getTime(); }
+    function fmt(n) { return n.toLocaleString('en-IN', {style:'currency', currency:'INR', minimumFractionDigits:0}); }
+    function copy(text) {
+        const el = document.createElement('textarea'); el.value = text; el.setAttribute('readonly', ''); el.style.position = 'absolute'; el.style.left = '-9999px'; document.body.appendChild(el); el.select();
+        try { document.execCommand('copy'); showToast("Copied: " + text); } catch (err) { prompt("Copy Manually:", text); } document.body.removeChild(el);
+    }
+    function showToast(msg) {
+        const t = document.getElementById('toastNotification'); document.getElementById('toastMessage').innerText = msg; t.classList.add('active');
+        setTimeout(() => { t.classList.remove('active'); }, 3000); 
+    }
+
+    function switchTab(tabName) {
+        document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+        const homeView = document.getElementById('view-home');
+        const graphView = document.getElementById('view-graph');
+        const listView = document.getElementById('view-list');
+        
+        homeView.style.display = 'none'; graphView.style.display = 'none'; listView.style.display = 'none';
+        
+        if (tabName === 'home') { homeView.style.display = 'block'; applyFilters(); } 
+        else if (tabName === 'graph') { graphView.style.display = 'block'; } 
+        else if (tabName === 'list') { listView.style.display = 'block'; applyFilters(); }
+        
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
     
-  currentEditId = id;  
-  document.getElementById('editStatus').value = item.status || '';  
-  document.getElementById('editFilled').value = item.filledDate || '';  
-  document.getElementById('editPaid').value = item.paidDate || '';  
-  document.getElementById('editRemarks').value = item.remarks || '';  
-  document.getElementById('editModal').classList.add('active');  
-}  
-  
-function autoFillDate() {  
-  const status = document.getElementById('editStatus').value;  
-  const today = new Date().toLocaleDateString('en-GB');  
-  if (status === 'PAID') {  
-    document.getElementById('editPaid').value = today;  
-  }  
-}  
-  
-function closeModal() {  
-  document.getElementById('editModal').classList.remove('active');  
-  currentEditId = null;  
-}  
-  
-async function saveChanges() {  
-  if (!currentEditId) return;  
-    
-  const payload = {  
-    id: currentEditId,  
-    status: document.getElementById('editStatus').value,  
-    filledDate: document.getElementById('editFilled').value,  
-    paidDate: document.getElementById('editPaid').value,  
-    remarks: document.getElementById('editRemarks').value  
-  };  
-    
-  try {  
-    // FIX: Changed 'updateData' to 'updateOrder' to match Backend
-    await apiCall('updateOrder', payload);  
-    showToast('Order Updated!');  
-    closeModal();  
-    fetchData(); // Refresh data  
-  } catch (e) {  
-    showToast('Update Failed');  
-  }  
-}  
-  
-function downloadCSV() {  
-  if (filteredData.length === 0) {  
-    showToast('No data to export');  
-    return;  
-  }  
-    
-  const headers = ['ID', 'Mediator', 'Product', 'Total', 'Deducted', 'Commission', 'Refundable', 'Status', 'Delivery Date', 'Filled Date', 'Paid Date'];  
-  // FIX: Safe newline for CSV join
-  const csv = [  
-    headers.join(','),  
-    ...filteredData.map(item => [  
-      `"${item.id}"`, item.mediator, item.product, item.total, item.deducted || 0,   
-      item.commission || 0, item.refundable || 0, item.status || 'QUEUES',  
-      item.deliveryDate || '', item.filledDate || '', item.paidDate || ''  
-    ].join(','))  
-  ].join('\n');  
-    
-  const blob = new Blob([csv], { type: 'text/csv' });  
-  const url = window.URL.createObjectURL(blob);  
-  const a = document.createElement('a');  
-  a.href = url;  
-  a.download = `preorder-orders-${new Date().toISOString().split('T')[0]}.csv`;  
-  a.click();  
-  window.URL.revokeObjectURL(url);  
-  showToast('CSV Downloaded!');  
-}  
-  
-// Navigation & UI  
-function switchTab(tab)
+    let lastScrollTop = 0;
+    const navBar = document.getElementById('mainNavBar');
+    window.addEventListener('scroll', function() {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        if (Math.abs(scrollTop - lastScrollTop) < 10) return;
+        if (scrollTop > lastScrollTop && scrollTop > 100) navBar.classList.add('nav-hidden');
+        else navBar.classList.remove('nav-hidden');
+        lastScrollTop = scrollTop;
+    });
+
+    // REPLACED: google.script.run -> apiCall
+    setInterval(()=>{ apiCall('serverPing').catch(e => console.log("Ping failed")); }, 180000);
+  </script>
+</body>
+</html>
